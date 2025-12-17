@@ -17,7 +17,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.example;
+package org.checkstyle;
 
 import java.lang.reflect.Field;
 import java.nio.file.Path;
@@ -98,7 +98,7 @@ public class PropertiesMacro extends AbstractMacro {
             throw new MacroExecutionException("Expected Sink to be an XdocSink.");
         }
 
-        final Path modulePath = Path.of(Main.ABSOLUTE_PATH_TO_CHECKSTYLE,
+        final Path modulePath = Path.of(GenerationUtil.getCheckstyleAbsolutePath(),
             (String) request.getParameter("modulePath"));
 
         configureGlobalProperties(modulePath.toString());
@@ -295,7 +295,8 @@ public class PropertiesMacro extends AbstractMacro {
         sink.rawText(ModuleJavadocParsingUtil.INDENT_LEVEL_14);
         sink.tableCell();
         final String description = SiteUtil
-                .getPropertyDescriptionForXdoc(propertyName, propertyJavadoc, currentModuleName);
+                .getPropertyDescriptionForXdoc(propertyName, propertyJavadoc, currentModuleName,
+                    GenerationUtil.getXdocPath());
 
         sink.rawText(description);
         sink.tableCell_();
@@ -364,7 +365,8 @@ public class PropertiesMacro extends AbstractMacro {
             }
             else {
                 final String relativePathToPropertyTypes =
-                        SiteUtil.getLinkToDocument(currentModuleName, PROPERTY_TYPES_XML);
+                        SiteUtil.getLinkToDocument(currentModuleName, PROPERTY_TYPES_XML,
+                            GenerationUtil.getXdocPath());
                 final String escapedType = type
                         .replace("[", ".5B")
                         .replace("]", ".5D");
@@ -389,7 +391,8 @@ public class PropertiesMacro extends AbstractMacro {
     private static void processLinkForTokenTypes(Sink sink)
             throws MacroExecutionException {
         final String link =
-                SiteUtil.getLinkToDocument(currentModuleName, SiteUtil.PATH_TO_TOKEN_TYPES);
+                SiteUtil.getLinkToDocument(currentModuleName, SiteUtil.PATH_TO_TOKEN_TYPES,
+                    GenerationUtil.getXdocPath());
 
         sink.text("subset of tokens ");
         sink.link(link);
@@ -407,7 +410,8 @@ public class PropertiesMacro extends AbstractMacro {
             throws MacroExecutionException {
         sink.rawText(ModuleJavadocParsingUtil.INDENT_LEVEL_16);
         final String link =
-                SiteUtil.getLinkToDocument(currentModuleName, SiteUtil.PATH_TO_TOKEN_TYPES);
+                SiteUtil.getLinkToDocument(currentModuleName, SiteUtil.PATH_TO_TOKEN_TYPES,
+                    GenerationUtil.getXdocPath());
         sink.link(link);
         sink.rawText(ModuleJavadocParsingUtil.INDENT_LEVEL_20);
         sink.text(SiteUtil.TOKENS);
@@ -460,7 +464,8 @@ public class PropertiesMacro extends AbstractMacro {
      */
     private static void writeLinkToToken(Sink sink, String document, String tokenName)
             throws MacroExecutionException {
-        final String link = SiteUtil.getLinkToDocument(currentModuleName, document)
+        final String link = SiteUtil.getLinkToDocument(currentModuleName, document,
+            GenerationUtil.getXdocPath())
                         + HASHTAG + tokenName;
         sink.link(link);
         sink.rawText(ModuleJavadocParsingUtil.INDENT_LEVEL_20);

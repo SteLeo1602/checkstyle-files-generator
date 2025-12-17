@@ -17,7 +17,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.example;
+package org.checkstyle;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -75,7 +75,7 @@ public class ExampleMacro extends AbstractMacro {
 
         List<String> lines = lastLines;
         if (!path.equals(lastPath)) {
-            lines = readFile("src/xdocs-examples/" + path);
+            lines = readFile(path);
             lastPath = path;
             lastLines = lines;
         }
@@ -129,7 +129,7 @@ public class ExampleMacro extends AbstractMacro {
      */
     private static List<String> readFile(String path) throws MacroExecutionException {
         try {
-            final Path exampleFilePath = Path.of(Main.ABSOLUTE_PATH_TO_CHECKSTYLE, path);
+            final Path exampleFilePath = Path.of(GenerationUtil.getCheckstyleAbsolutePath(), path);
             return Files.readAllLines(exampleFilePath);
         }
         catch (IOException ioException) {

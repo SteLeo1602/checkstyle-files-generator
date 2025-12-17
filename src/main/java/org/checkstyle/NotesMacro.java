@@ -17,7 +17,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.example;
+package org.checkstyle;
 
 import java.nio.file.Path;
 
@@ -34,27 +34,28 @@ import com.puppycrawl.tools.checkstyle.site.ModuleJavadocParsingUtil;
 import com.puppycrawl.tools.checkstyle.site.SiteUtil;
 
 /**
- * A macro that inserts a {@code @since} version of module from its Javadoc.
+ * A macro that inserts a notes subsection of module from its Javadoc.
  */
-@Component(role = Macro.class, hint = "since")
-public class SinceMacro extends AbstractMacro {
+@Component(role = Macro.class, hint = "notes")
+public class NotesMacro extends AbstractMacro {
 
     @Override
     public void execute(Sink sink, MacroRequest request) throws MacroExecutionException {
-        final Path modulePath = Path.of(Main.ABSOLUTE_PATH_TO_CHECKSTYLE,
-            (String) request.getParameter("modulePath"));
+        final Path modulePath = Path.of(GenerationUtil.getCheckstyleAbsolutePath(),
+            (String) request.getParameter("modulePath"));;
         final String moduleName = CommonUtil.getFileNameWithoutExtension(modulePath.toString());
 
         final DetailNode moduleJavadoc = SiteUtil.getModuleJavadoc(moduleName, modulePath);
         if (moduleJavadoc == null) {
-            throw new MacroExecutionException("Javadoc of module " + moduleName + " is not found.");
+            throw new MacroExecutionException(
+                "Javadoc of module " + moduleName + " is not found.");
         }
 
-        final String moduleSinceVersion = ModuleJavadocParsingUtil
-                .getModuleSinceVersion(moduleJavadoc);
-        sink.paragraph();
-        sink.text("Since Checkstyle " + moduleSinceVersion);
-        sink.paragraph_();
+        final String moduleNotes =
+            ModuleJavadocParsingUtil.getModuleNotes(moduleJavadoc);
+
+        ModuleJavadocParsingUtil.writeOutJavadocPortion(moduleNotes, sink);
+
     }
 
 }

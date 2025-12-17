@@ -17,7 +17,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.example;
+package org.checkstyle;
 
 import java.nio.file.Path;
 import java.util.Locale;
@@ -84,7 +84,8 @@ public class ParentModuleMacro extends AbstractMacro {
      */
     private static String getLinkToParentModule(String parentModule, String moduleName)
             throws MacroExecutionException {
-        final Path templatePath = SiteUtil.getTemplatePath(moduleName);
+        final Path templatePath = SiteUtil.getTemplatePath(moduleName,
+            GenerationUtil.getXdocPath());
         if (templatePath == null) {
             throw new MacroExecutionException(
                     String.format(Locale.ROOT, "Could not find template for %s", moduleName));
@@ -94,7 +95,7 @@ public class ParentModuleMacro extends AbstractMacro {
             throw new MacroExecutionException("Failed to get parent path for " + templatePath);
         }
         return templatePathParent
-                .relativize(Path.of("src", "site/xdoc", "config.xml"))
+                .relativize(Path.of(GenerationUtil.getXdocPath(), "config.xml"))
                 .toString()
                 .replace(".xml", ".html")
                 .replace('\\', '/')

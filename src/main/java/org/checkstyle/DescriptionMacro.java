@@ -17,7 +17,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.example;
+package org.checkstyle;
 
 import java.nio.file.Path;
 
@@ -41,7 +41,7 @@ public class DescriptionMacro extends AbstractMacro {
 
     @Override
     public void execute(Sink sink, MacroRequest request) throws MacroExecutionException {
-        final Path modulePath = Path.of(Main.ABSOLUTE_PATH_TO_CHECKSTYLE,
+        final Path modulePath = Path.of(GenerationUtil.getCheckstyleAbsolutePath(),
             (String) request.getParameter("modulePath"));
         final String moduleName = CommonUtil.getFileNameWithoutExtension(modulePath.toString());
 
