@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // checkstyle: Checks Java source code and other text files for adherence to a set of rules.
-// Copyright (C) 2001-2025 the original author or authors.
+// Copyright (C) 2001-2026 the original author or authors.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.example;
+package org.checkstyle;
 
 import java.nio.file.Path;
 import java.util.Locale;
@@ -41,13 +41,13 @@ public class ParentModuleMacro extends AbstractMacro {
     @Override
     public void execute(Sink sink, MacroRequest request) throws MacroExecutionException {
         // until https://github.com/checkstyle/checkstyle/issues/13426
-        if (!(sink instanceof XdocSink)) {
+        if (!(sink instanceof XdocSink xdocSink)) {
             throw new MacroExecutionException("Expected Sink to be an XdocSink.");
         }
         final String moduleName = (String) request.getParameter("moduleName");
         final Object instance = SiteUtil.getModuleInstance(moduleName);
         final Class<?> clss = instance.getClass();
-        createParentModuleParagraph((XdocSink) sink, clss, moduleName);
+        createParentModuleParagraph(xdocSink, clss, moduleName);
     }
 
     /**
@@ -84,7 +84,8 @@ public class ParentModuleMacro extends AbstractMacro {
      */
     private static String getLinkToParentModule(String parentModule, String moduleName)
             throws MacroExecutionException {
-        final Path templatePath = SiteUtil.getTemplatePath(moduleName);
+        final Path templatePath = SiteUtil.getTemplatePath(moduleName,
+            GenerationUtil.getXdocPath());
         if (templatePath == null) {
             throw new MacroExecutionException(
                     String.format(Locale.ROOT, "Could not find template for %s", moduleName));
@@ -94,7 +95,7 @@ public class ParentModuleMacro extends AbstractMacro {
             throw new MacroExecutionException("Failed to get parent path for " + templatePath);
         }
         return templatePathParent
-                .relativize(Path.of("src", "site/xdoc", "config.xml"))
+                .relativize(Path.of(GenerationUtil.getXdocPath(), "config.xml"))
                 .toString()
                 .replace(".xml", ".html")
                 .replace('\\', '/')

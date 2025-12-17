@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>org.checkstyle</groupId>
     <artifactId>checkstyle-files-generator</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -19,7 +19,7 @@
         <dependency>
             <artifactId>checkstyle</artifactId>
             <groupId>com.puppycrawl.tools</groupId>
-            <version>12.3.1-SNAPSHOT</version>
+            <version>13.1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -27,8 +27,7 @@
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.13.4</version>
         </dependency>
-
-
+        
         <dependency>
           <groupId>org.apache.maven.doxia</groupId>
           <artifactId>doxia-core</artifactId>
@@ -62,18 +61,44 @@
 
     <build>
         <plugins>
-          <plugin>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-component-metadata</artifactId>
-            <version>2.2.0</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>generate-metadata</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
+            <plugin>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-component-metadata</artifactId>
+                <version>2.2.0</version>
+                <executions>
+                  <execution>
+                    <goals>
+                      <goal>generate-metadata</goal>
+                    </goals>
+                  </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.8.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <archive>
+                                <manifest>
+                                    <mainClass>org.checkstyle.Main</mainClass>
+                                </manifest>
+                            </archive>
+                            <appendAssemblyId>false</appendAssemblyId>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 

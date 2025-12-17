@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // checkstyle: Checks Java source code and other text files for adherence to a set of rules.
-// Copyright (C) 2001-2025 the original author or authors.
+// Copyright (C) 2001-2026 the original author or authors.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.example;
+package org.checkstyle;
 
 import java.util.Set;
 
@@ -39,14 +39,14 @@ public class ViolationMessagesMacro extends AbstractMacro {
     @Override
     public void execute(Sink sink, MacroRequest request) throws MacroExecutionException {
         // until https://github.com/checkstyle/checkstyle/issues/13426
-        if (!(sink instanceof XdocSink)) {
+        if (!(sink instanceof XdocSink xdocSink)) {
             throw new MacroExecutionException("Expected Sink to be an XdocSink.");
         }
         final String checkName = (String) request.getParameter("checkName");
         final Object instance = SiteUtil.getModuleInstance(checkName);
         final Class<?> clss = instance.getClass();
         final Set<String> messageKeys = SiteUtil.getMessageKeys(clss);
-        createListOfMessages((XdocSink) sink, clss, messageKeys);
+        createListOfMessages(xdocSink, clss, messageKeys);
     }
 
     /**
