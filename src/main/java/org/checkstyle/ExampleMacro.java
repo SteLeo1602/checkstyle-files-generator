@@ -29,19 +29,19 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.inject.Named;
+
 import org.apache.maven.doxia.macro.AbstractMacro;
-import org.apache.maven.doxia.macro.Macro;
 import org.apache.maven.doxia.macro.MacroExecutionException;
 import org.apache.maven.doxia.macro.MacroRequest;
 import org.apache.maven.doxia.sink.Sink;
-import org.codehaus.plexus.component.annotations.Component;
 
 import com.puppycrawl.tools.checkstyle.site.ModuleJavadocParsingUtil;
 
 /**
  * A macro that inserts a snippet of code or configuration from a file.
  */
-@Component(role = Macro.class, hint = "example")
+@Named("example")
 public class ExampleMacro extends AbstractMacro {
 
     /** Starting delimiter for config snippets. */

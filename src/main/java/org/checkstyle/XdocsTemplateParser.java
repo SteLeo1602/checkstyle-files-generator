@@ -24,10 +24,14 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.inject.Named;
 import javax.swing.text.html.HTML.Attribute;
 
 import org.apache.maven.doxia.macro.MacroExecutionException;
@@ -35,9 +39,8 @@ import org.apache.maven.doxia.macro.MacroRequest;
 import org.apache.maven.doxia.macro.manager.MacroNotFoundException;
 import org.apache.maven.doxia.module.xdoc.XdocParser;
 import org.apache.maven.doxia.parser.ParseException;
-import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
-import org.codehaus.plexus.component.annotations.Component;
+import org.apache.maven.doxia.sink.impl.EventCapturingSinkProxy;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.pull.XmlPullParser;
 
@@ -53,7 +56,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParser;
  *
  * @see ExampleMacro
  */
-@Component(role = Parser.class, hint = "xdocs-template")
+@Named("xdocs-template")
 public class XdocsTemplateParser extends XdocParser {
 
     /** User working directory. */
@@ -121,6 +124,30 @@ public class XdocsTemplateParser extends XdocParser {
                 sink.rawText(parser.getText());
             }
         }
+    }
+
+    /**
+     * Unwraps our XdocsTemplateSink object from a Proxy object
+     */
+    @Override
+    protected Sink getWrappedSink(Sink sink) {
+        EventCapturingSinkProxy handler = (EventCapturingSinkProxy)
+            Proxy.getInvocationHandler(sink);
+
+        Sink extractedSink;
+
+        try {
+            Field sinkField = EventCapturingSinkProxy.class.getDeclaredField("sink");
+
+            sinkField.setAccessible(true);
+            extractedSink = (Sink) sinkField.get(handler);
+            sinkField.setAccessible(false);
+        }
+        catch (Exception e) {
+            extractedSink = null;
+        }
+
+        return extractedSink;
     }
 
     /**

@@ -21,20 +21,22 @@ package org.checkstyle;
 
 import java.util.Set;
 
+import javax.inject.Named;
+
 import org.apache.maven.doxia.macro.AbstractMacro;
-import org.apache.maven.doxia.macro.Macro;
 import org.apache.maven.doxia.macro.MacroExecutionException;
 import org.apache.maven.doxia.macro.MacroRequest;
 import org.apache.maven.doxia.module.xdoc.XdocSink;
 import org.apache.maven.doxia.sink.Sink;
-import org.codehaus.plexus.component.annotations.Component;
+import org.apache.maven.doxia.sink.SinkEventAttributes;
+import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 
 import com.puppycrawl.tools.checkstyle.site.SiteUtil;
 
 /**
  * A macro that inserts a list of the violation messages.
  */
-@Component(role = Macro.class, hint = "violation-messages")
+@Named("violation-messages")
 public class ViolationMessagesMacro extends AbstractMacro {
     @Override
     public void execute(Sink sink, MacroRequest request) throws MacroExecutionException {
@@ -97,7 +99,7 @@ public class ViolationMessagesMacro extends AbstractMacro {
 
         // Place an <a>.
         sink.rawText(indentLevel12);
-        sink.link(messageKeyUrl);
+        sink.link(messageKeyUrl, GenerationUtil.SINK_EVENT_ATTRIBUTES);
         // Further indent the text.
         sink.rawText(indentLevel14);
         sink.rawText(messageKey);

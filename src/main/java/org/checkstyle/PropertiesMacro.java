@@ -29,13 +29,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import javax.inject.Named;
+
 import org.apache.maven.doxia.macro.AbstractMacro;
-import org.apache.maven.doxia.macro.Macro;
 import org.apache.maven.doxia.macro.MacroExecutionException;
 import org.apache.maven.doxia.macro.MacroRequest;
 import org.apache.maven.doxia.module.xdoc.XdocSink;
 import org.apache.maven.doxia.sink.Sink;
-import org.codehaus.plexus.component.annotations.Component;
 
 import com.puppycrawl.tools.checkstyle.PropertyType;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
@@ -50,7 +50,7 @@ import com.puppycrawl.tools.checkstyle.site.SiteUtil;
 /**
  * A macro that inserts a table of properties for the given checkstyle module.
  */
-@Component(role = Macro.class, hint = "properties")
+@Named("properties")
 public class PropertiesMacro extends AbstractMacro {
 
     /**
@@ -275,7 +275,7 @@ public class PropertiesMacro extends AbstractMacro {
         sink.rawText(ModuleJavadocParsingUtil.INDENT_LEVEL_14);
         sink.tableCell();
         sink.rawText("<a id=\"" + propertyName + "\"/>");
-        sink.link(HASHTAG + propertyName);
+        sink.link(HASHTAG + propertyName, GenerationUtil.SINK_EVENT_ATTRIBUTES);
         sink.text(propertyName);
         sink.link_();
         sink.tableCell_();
@@ -374,7 +374,7 @@ public class PropertiesMacro extends AbstractMacro {
                 final String url =
                         String.format(Locale.ROOT, URL_F, relativePathToPropertyTypes, escapedType);
 
-                sink.link(url);
+                sink.link(url, GenerationUtil.SINK_EVENT_ATTRIBUTES);
                 sink.text(type);
                 sink.link_();
             }
@@ -395,7 +395,7 @@ public class PropertiesMacro extends AbstractMacro {
                     GenerationUtil.getXdocPath());
 
         sink.text("subset of tokens ");
-        sink.link(link);
+        sink.link(link, GenerationUtil.SINK_EVENT_ATTRIBUTES);
         sink.text("TokenTypes");
         sink.link_();
     }
@@ -412,7 +412,7 @@ public class PropertiesMacro extends AbstractMacro {
         final String link =
                 SiteUtil.getLinkToDocument(currentModuleName, SiteUtil.PATH_TO_TOKEN_TYPES,
                     GenerationUtil.getXdocPath());
-        sink.link(link);
+        sink.link(link, GenerationUtil.SINK_EVENT_ATTRIBUTES);
         sink.rawText(ModuleJavadocParsingUtil.INDENT_LEVEL_20);
         sink.text(SiteUtil.TOKENS);
         sink.link_();
@@ -467,7 +467,7 @@ public class PropertiesMacro extends AbstractMacro {
         final String link = SiteUtil.getLinkToDocument(currentModuleName, document,
             GenerationUtil.getXdocPath())
                         + HASHTAG + tokenName;
-        sink.link(link);
+        sink.link(link, GenerationUtil.SINK_EVENT_ATTRIBUTES);
         sink.rawText(ModuleJavadocParsingUtil.INDENT_LEVEL_20);
         sink.text(tokenName);
         sink.link_();

@@ -34,13 +34,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
+import javax.inject.Named;
 
 import org.apache.maven.doxia.macro.AbstractMacro;
-import org.apache.maven.doxia.macro.Macro;
 import org.apache.maven.doxia.macro.MacroExecutionException;
 import org.apache.maven.doxia.macro.MacroRequest;
 import org.apache.maven.doxia.sink.Sink;
-import org.codehaus.plexus.component.annotations.Component;
 
 import com.puppycrawl.tools.checkstyle.api.DetailNode;
 import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
@@ -65,7 +64,7 @@ import com.puppycrawl.tools.checkstyle.site.SiteUtil;
  * &lt;/macro&gt;
  * </pre>
  */
-@Component(role = Macro.class, hint = "allCheckSummaries")
+@Named("allCheckSummaries")
 public class AllCheckSummaries extends AbstractMacro {
 
     /** Initial capacity for StringBuilder in wrapSummary method. */

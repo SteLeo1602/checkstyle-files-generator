@@ -22,13 +22,13 @@ package org.checkstyle;
 import java.nio.file.Path;
 import java.util.Locale;
 
+import javax.inject.Named;
+
 import org.apache.maven.doxia.macro.AbstractMacro;
-import org.apache.maven.doxia.macro.Macro;
 import org.apache.maven.doxia.macro.MacroExecutionException;
 import org.apache.maven.doxia.macro.MacroRequest;
 import org.apache.maven.doxia.module.xdoc.XdocSink;
 import org.apache.maven.doxia.sink.Sink;
-import org.codehaus.plexus.component.annotations.Component;
 
 import com.puppycrawl.tools.checkstyle.site.ModuleJavadocParsingUtil;
 import com.puppycrawl.tools.checkstyle.site.SiteUtil;
@@ -36,7 +36,7 @@ import com.puppycrawl.tools.checkstyle.site.SiteUtil;
 /**
  * A macro that inserts a link to the parent module.
  */
-@Component(role = Macro.class, hint = "parent-module")
+@Named("parent-module")
 public class ParentModuleMacro extends AbstractMacro {
     @Override
     public void execute(Sink sink, MacroRequest request) throws MacroExecutionException {
@@ -67,7 +67,7 @@ public class ParentModuleMacro extends AbstractMacro {
         sink.paragraph();
         sink.setInsertNewline(true);
         sink.rawText(ModuleJavadocParsingUtil.INDENT_LEVEL_10);
-        sink.link(linkToParentModule);
+        sink.link(linkToParentModule, GenerationUtil.SINK_EVENT_ATTRIBUTES);
         sink.text(parentModule);
         sink.link_();
         sink.rawText(ModuleJavadocParsingUtil.INDENT_LEVEL_8);

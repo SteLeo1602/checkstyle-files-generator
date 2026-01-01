@@ -21,12 +21,12 @@ package org.checkstyle;
 
 import java.nio.file.Path;
 
+import javax.inject.Named;
+
 import org.apache.maven.doxia.macro.AbstractMacro;
-import org.apache.maven.doxia.macro.Macro;
 import org.apache.maven.doxia.macro.MacroExecutionException;
 import org.apache.maven.doxia.macro.MacroRequest;
 import org.apache.maven.doxia.sink.Sink;
-import org.codehaus.plexus.component.annotations.Component;
 
 import com.puppycrawl.tools.checkstyle.api.DetailNode;
 import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
@@ -36,7 +36,7 @@ import com.puppycrawl.tools.checkstyle.site.SiteUtil;
 /**
  * A macro that inserts a notes subsection of module from its Javadoc.
  */
-@Component(role = Macro.class, hint = "notes")
+@Named("notes")
 public class NotesMacro extends AbstractMacro {
 
     @Override

@@ -3,12 +3,17 @@ package org.checkstyle;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.apache.maven.doxia.sink.SinkEventAttributes;
+import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
+
 import com.puppycrawl.tools.checkstyle.site.SiteUtil;
 
 public class GenerationUtil {
 
     public static final String MAIN_FOLDER_PATH = Path.of(
             "src", "main", "java", "com", "puppycrawl", "tools", "checkstyle").toString();
+
+    public static final SinkEventAttributes SINK_EVENT_ATTRIBUTES = new SinkEventAttributeSet();
 
     private static final String CHECKS = "checks";
 
